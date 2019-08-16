@@ -1,10 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Houssem ADOUNI</title>
 </head>
+
 <body>
-<p> This is our home page </p>
+
+<p> CNX </p>
+<form action= {%url 'main_page' %} method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Submit">
+</form>
+
+<form action='/disconnect/' method='get'>
+    <button type='submit'> disconnect </button>
+</form>
+
+<p>user : {{user}}</p>
+<p>is authenticated ? : {{auth}}</p>
+<p>ip : {{ip}}</p>
+
 </body>
 </html>
