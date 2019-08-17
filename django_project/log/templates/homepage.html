@@ -1,27 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base_file.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <title>Houssem ADOUNI</title>
-</head>
-
-<body>
-
-<p> CNX </p>
+{% block content %}
 <form action= {%url 'main_page' %} method="post">
     {% csrf_token %}
     {{ form }}
     <input type="submit" value="Submit">
 </form>
 
-<form action='/disconnect/' method='get'>
-    <button type='submit'> disconnect </button>
-</form>
-
 <p>user : {{user}}</p>
 <p>is authenticated ? : {{auth}}</p>
 <p>ip : {{ip}}</p>
-
-</body>
-</html>
+{% endblock %}
