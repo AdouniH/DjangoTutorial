@@ -1,13 +1,11 @@
 {% extends 'base_file.html' %}
 
 {% block content %}
+<p>Home page</p>
 <form action= {%url 'main_page' %} method="post">
     {% csrf_token %}
-    {{ form }}
+    {{ form.as_p }}
     <input type="submit" value="Submit">
 </form>
 
-<p>user : {{user}}</p>
-<p>is authenticated ? : {{auth}}</p>
-<p>ip : {{ip}}</p>
 {% endblock %}
