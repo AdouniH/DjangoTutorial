@@ -2,26 +2,30 @@
 from django.shortcuts import render
 from django.contrib.auth import authenticate
 from django.contrib.auth import logout, login
-from .form import Login_form
+from .form import Login_form, Log_form
 from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponse
+from .models import Visitor
 
 def main_page(request):
+    form = Log_form()
 
-    if not request.user.is_authenticated:
 
-        form = Login_form()
 
-        # login
-        if request.method == 'POST':
-            usor = authenticate(username=request.POST["user_name"], password=request.POST["user_pwd"])
-            if usor:
-                login(request, usor)
-                return render(request, 'home.html', {})
+    # login
+    if request.method == 'POST':
+        code = request.POST['name']
+        # TODO: OneToOne Management
+        comp_object = Visitor.objects.filter(code=code)
+        if comp_object:
+            name = comp_object[0].name
+            pwd = comp_object[0].pwd
 
-        return render(request, 'homepage.html', {"form": form})
+            return HttpResponse(comp_object[0].name)
+        #
+    return render(request, 'homepage.html', {"form": form})
 
-    return render(request, 'home.html', {})
+    # return render(request, 'home.html', {})
 
 
 def signup(request):
