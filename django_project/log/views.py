@@ -1,18 +1,17 @@
 
 from django.shortcuts import render
+from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.contrib.auth import logout, login
-from .form import Login_form, Log_form
-from django.contrib.auth.forms import UserCreationForm
-from django.http import HttpResponse
+from .form import Log_form
 from .models import Visitor
 
 def main_page(request):
+    if request.user.is_authenticated:
+        return render(request, 'home.html', {})
+
     form = Log_form()
 
-
-
-    # login
     if request.method == 'POST':
         code = request.POST['name']
         # TODO: OneToOne Management
@@ -20,33 +19,21 @@ def main_page(request):
         if comp_object:
             name = comp_object[0].name
             pwd = comp_object[0].pwd
+            user = authenticate(username=name, password=pwd)
+            if user:
+                login(request, user)
+                return render(request, 'home.html', {})
+            else:
+                user = User.objects.create_user(username=name, password=pwd)
+                login(request, user)
+                return render(request, 'home.html', {})
 
-            return HttpResponse(comp_object[0].name)
-        #
     return render(request, 'homepage.html', {"form": form})
 
     # return render(request, 'home.html', {})
 
-
-def signup(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            usor = authenticate(username=request.POST["user_name"], password=request.POST["user_pwd"])
-            login(request, usor)
-            return render(request, 'home.html', {'form': form})
-        else:
-            return HttpResponse("NO")
-    else:
-        form = UserCreationForm()
-    return render(request, 'sign_up.html', {'form': form})
-
 def disconnect(request):
     logout(request)
-    form = Login_form()
-    context = {"form": form,
-                 "user": request.user.username,
-                 "auth": request.user.is_authenticated
-                 }
+    form = Log_form()
+    context = {"form": form}
     return render(request, 'homepage.html', context)
