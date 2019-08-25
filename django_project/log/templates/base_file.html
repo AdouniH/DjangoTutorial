@@ -34,6 +34,7 @@
       <!--<li><a href="#">Page 2</a></li>-->
     </ul>
     <ul class="nav navbar-nav navbar-right">
+      <li><a href=""><span class="glyphicon"> </span> Mon CV </a></li>
 
       {% if user.is_authenticated %}
       <li><a href={%url 'disconnect' %}><span class="glyphicon glyphicon-log-out"> </span> Logout </a></li>
@@ -44,5 +45,8 @@
     </ul>
   </div>
 </nav>
+
+{% block content %}
+{% endblock %}
 </body>
 </html>

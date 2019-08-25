@@ -1,5 +1,5 @@
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.contrib.auth import logout, login
@@ -20,20 +20,24 @@ def main_page(request):
             name = comp_object[0].name
             pwd = comp_object[0].pwd
             user = authenticate(username=name, password=pwd)
-            if user:
-                login(request, user)
-                return render(request, 'home.html', {})
-            else:
+            if not user:
                 user = User.objects.create_user(username=name, password=pwd)
-                login(request, user)
-                return render(request, 'home.html', {})
+
+            login(request, user)
+            return redirect('/cv_houssem_adouni/')
+
+            # return render(request, 'home.html', {})
+        else:
+            return render(request, 'homepage.html', {"form": form, 'msg': 'Veuillez entrer un bon code'})
 
     return render(request, 'homepage.html', {"form": form})
 
-    # return render(request, 'home.html', {})
 
 def disconnect(request):
     logout(request)
     form = Log_form()
     context = {"form": form}
     return render(request, 'homepage.html', context)
+
+def mycv(request):
+    return render(request, 'mycv.html', {})
