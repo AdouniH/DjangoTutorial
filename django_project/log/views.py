@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.contrib.auth import logout, login
+from django.http import HttpResponse
 from .form import Log_form
 from .models import Visitor
 
@@ -24,7 +25,7 @@ def main_page(request):
                 user = User.objects.create_user(username=name, password=pwd)
 
             login(request, user)
-            return redirect('/cv_houssem_adouni/')
+            return redirect('/cv_houssem_adouni/experience')
 
             # return render(request, 'home.html', {})
         else:
@@ -39,5 +40,9 @@ def disconnect(request):
     context = {"form": form}
     return render(request, 'homepage.html', context)
 
-def mycv(request):
-    return render(request, 'mycv.html', {})
+def mycv(request, section):
+    context = {}
+    if section in ["experience", "projets", "competences", "diplomes"]:
+        context[section] = section
+
+    return render(request, 'mycv.html', context)
