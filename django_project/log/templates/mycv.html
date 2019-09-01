@@ -4,8 +4,8 @@
 {% block content %}
 
 <div class="container-fluid">
-  <div class="row content ">
-    <div class="col-sm-3" >
+  <div class="row content">
+    <div class="col-sm-3">
       <!--<h2>Logo</h2>-->
       <ul class="nav nav-pills nav-stacked">
         {% if experience %}
@@ -36,8 +36,9 @@
     </div>
     <div class="col-sm-8" >
       {% if experience %}
-
         {% include "cv_templates/experience.html" %}
+      {% elif projets %}
+      {% include "cv_templates/projets.html" %}
       {% endif %}
 
     </div>
