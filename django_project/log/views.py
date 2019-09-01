@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import logout, login
 from django.http import HttpResponse
 from .form import Log_form
-from .models import Visitor
+from .models import Visitor, RendezVous
 
 def main_page(request):
     if request.user.is_authenticated:
@@ -46,3 +46,45 @@ def mycv(request, section):
         context[section] = section
 
     return render(request, 'mycv.html', context)
+
+
+def rdv(request, section):
+    day_mapping = {
+        "Monday": "Lundi",
+        "Tuesday": "Mardi",
+        "Wednesday": "Mercredi",
+        "Thursday": "Jeudi",
+        "Friday": "Vendredi",
+        "Saturday": "Samedi",
+        "Sunday": "Dimanche"
+    }
+    context = {}
+    if section in ["phone", "sur_place"]:
+        context[section] = section
+
+    if section == "phone":
+        phone_crenaux = RendezVous.objects.all()
+        l = []
+        for i in phone_crenaux:
+            l.append(i.time.strftime('%Y%m%d#%H:%M#%A'))
+
+        # d = (l[0]).split('#')[0]
+        d = {}
+        for i in l:
+            day = i.split('#')[0] + '-'+i.split('#')[2]
+            d[day] = []
+
+        for j in l:
+            day = j.split('#')[0] + '-' + j.split('#')[2]
+            hour = j.split('#')[1]
+
+            d[day].append(hour)
+        result = {}
+        for key in d:
+            new_key = "{} le {}/{}/{}:".format(day_mapping[key[9:]], key[6:8], key[4:6], key[:4])
+            result[new_key] = d[key]
+
+        context["rdv"] = result
+
+
+    return render(request, 'rdv.html', context)
