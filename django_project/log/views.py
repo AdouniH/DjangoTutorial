@@ -3,9 +3,11 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.contrib.auth import logout, login
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from .form import Log_form
 from .models import Visitor, RendezVous
+from .business_module.business import arrange
 
 def main_page(request):
     if request.user.is_authenticated:
@@ -40,6 +42,7 @@ def disconnect(request):
     context = {"form": form}
     return render(request, 'homepage.html', context)
 
+@login_required
 def mycv(request, section):
     context = {}
     if section in ["experience", "projets", "competences", "diplomes"]:
@@ -47,7 +50,7 @@ def mycv(request, section):
 
     return render(request, 'mycv.html', context)
 
-
+@login_required
 def rdv(request, section):
     day_mapping = {
         "Monday": "Lundi",
@@ -64,27 +67,22 @@ def rdv(request, section):
 
     if section == "phone":
         phone_crenaux = RendezVous.objects.all()
+
         l = []
         for i in phone_crenaux:
-            l.append(i.time.strftime('%Y%m%d#%H:%M#%A'))
+            x = {}
+            x["day"] = i.time.strftime('%d/%m/%Y')
+            x["day_name"] = i.time.strftime('%A')
+            x["hour"] = i.time.strftime('%H:%M')
+            x["id"] = i.id
+            x["comparator"] = i.time.strftime('%Y%m%d')
+            l.append(x)
+        sorted_creneau = arrange(l)
 
-        # d = (l[0]).split('#')[0]
-        d = {}
-        for i in l:
-            day = i.split('#')[0] + '-'+i.split('#')[2]
-            d[day] = []
-
-        for j in l:
-            day = j.split('#')[0] + '-' + j.split('#')[2]
-            hour = j.split('#')[1]
-
-            d[day].append(hour)
-        result = {}
-        for key in d:
-            new_key = "{} le {}/{}/{}:".format(day_mapping[key[9:]], key[6:8], key[4:6], key[:4])
-            result[new_key] = d[key]
-
-        context["rdv"] = result
+        context["rdvs"] = sorted_creneau
 
 
     return render(request, 'rdv.html', context)
+
+def rdv_fix(request, creneau_id):
+    return HttpResponse(str(creneau_id))
