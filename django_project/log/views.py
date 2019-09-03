@@ -62,27 +62,35 @@ def rdv(request, section):
         "Sunday": "Dimanche"
     }
     context = {}
+    phone_crenaux = []
     if section in ["phone", "sur_place"]:
         context[section] = section
 
     if section == "phone":
-        phone_crenaux = RendezVous.objects.all()
+        phone_crenaux = RendezVous.objects.filter(rdv_type="phone")
 
-        l = []
-        for i in phone_crenaux:
-            x = {}
-            x["day"] = i.time.strftime('%d/%m/%Y')
-            x["day_name"] = i.time.strftime('%A')
-            x["hour"] = i.time.strftime('%H:%M')
-            x["id"] = i.id
-            x["comparator"] = i.time.strftime('%Y%m%d')
-            l.append(x)
-        sorted_creneau = arrange(l)
+    elif section == "sur_place":
+        phone_crenaux = RendezVous.objects.filter(rdv_type="sur_place")
 
-        context["rdvs"] = sorted_creneau
+    l = []
+    for i in phone_crenaux:
+        x = {}
+        x["day"] = i.time.strftime('%d/%m/%Y')
+        x["day_name"] = day_mapping[i.time.strftime('%A')]
+        x["hour"] = i.time.strftime('%H:%M')
+        x["id"] = i.id
+        x["comparator"] = i.time.strftime('%Y%m%d')
+        l.append(x)
+    sorted_creneau = arrange(l)
+
+    context["rdvs"] = sorted_creneau
 
 
     return render(request, 'rdv.html', context)
 
 def rdv_fix(request, creneau_id):
-    return HttpResponse(str(creneau_id))
+    rdv_creneau = RendezVous.objects.get(id=creneau_id)
+    creneau_type = rdv_creneau.rdv_type
+    context = {}
+    context[creneau_type] = creneau_type
+    return render(request, 'rdv_form.html', context)

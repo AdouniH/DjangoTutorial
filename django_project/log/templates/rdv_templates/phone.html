@@ -1,7 +1,7 @@
      <div class="container">
         <h3>Veuillez choisir un créneau</h3>
             {% for i in rdvs %}
-            <p> {{i.day_name}} {{ i.day}} </p>
+            <p> {{i.day_name}} le {{ i.day}} </p>
             {% for j in i.hours%}
 
          <a href="{% url 'rdv_fix' j.id %}"><button type="button" class="btn btn-success">{{j.hour}}</button></a>

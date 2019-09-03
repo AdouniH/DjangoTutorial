@@ -24,8 +24,10 @@
     <div class=" col-sm-3 container">
 
         {% if phone%}
-    {% include "rdv_templates/phone.html" %}
-        {% endif %}
+          {% include "rdv_templates/phone.html" %}
+      {% elif sur_place %}
+                {% include "rdv_templates/sur_place.html" %}
+      {% endif %}
     </div>
 
   </div>

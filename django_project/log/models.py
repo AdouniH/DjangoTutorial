@@ -12,8 +12,16 @@ class Visitor(models.Model):
 
 
 class RendezVous(models.Model):
+    rdv_types = [('phone', 'phone'), ('sur_place', 'sur_place')]
+    rdv_type = models.CharField(max_length=100, choices=rdv_types, blank=True)
+
     id = models.AutoField(primary_key=True)
     time = models.DateTimeField()
 
     def __str__(self):
         return self.time.strftime('%Y%m%d#%H:%M')
+
+class token_rdv(models.Model):
+    handeler_name = models.CharField(max_length=200)
+    handeler_email = models.EmailField(max_length=254)
+    input_text = models.TextField()
