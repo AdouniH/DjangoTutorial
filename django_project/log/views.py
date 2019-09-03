@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import logout, login
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from .form import Log_form
+from .form import Log_form, TokenrdvForm
 from .models import Visitor, RendezVous
 from .business_module.business import arrange
 
@@ -88,9 +88,12 @@ def rdv(request, section):
 
     return render(request, 'rdv.html', context)
 
+@login_required
 def rdv_fix(request, creneau_id):
+    form = TokenrdvForm()
     rdv_creneau = RendezVous.objects.get(id=creneau_id)
     creneau_type = rdv_creneau.rdv_type
     context = {}
     context[creneau_type] = creneau_type
+    context["form"] = form
     return render(request, 'rdv_form.html', context)

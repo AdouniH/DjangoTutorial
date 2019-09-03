@@ -21,7 +21,23 @@ class RendezVous(models.Model):
     def __str__(self):
         return self.time.strftime('%Y%m%d#%H:%M')
 
-class token_rdv(models.Model):
-    handeler_name = models.CharField(max_length=200)
-    handeler_email = models.EmailField(max_length=254)
-    input_text = models.TextField()
+class Token_rdv(models.Model):
+    CHOICES = [
+        ("1", 'moins de 15min'),
+        ("2", 'entre 15min et 30min'),
+        ("3", 'plus que 30min')
+    ]
+    name = models.CharField(max_length=200, verbose_name="Votre nom")
+    email = models.EmailField(max_length=254, verbose_name="Votre email")
+    duration = models.CharField(
+        max_length=2,
+        choices=CHOICES,
+        default="1",
+        verbose_name="durée de l'appel prévue"
+    )
+    commentaire = models.TextField()
+    rdv_shift = models.ForeignKey(
+        'RendezVous',
+        on_delete=models.CASCADE
+    )
+
