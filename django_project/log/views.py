@@ -90,10 +90,28 @@ def rdv(request, section):
 
 @login_required
 def rdv_fix(request, creneau_id):
+    if request.method == "POST":
+        form = TokenrdvForm(request.POST)
+        if form.is_valid():
+            form.cleaned_data["name"] = "haha"
+            rdv_object = form.save(commit=False)
+            rdv_object.rdv_shift = RendezVous.objects.get(id=creneau_id)
+            rdv_object.save()
+            return HttpResponse("SUCCESS")
+        else:
+            return HttpResponse("form is not valid")
     form = TokenrdvForm()
     rdv_creneau = RendezVous.objects.get(id=creneau_id)
     creneau_type = rdv_creneau.rdv_type
     context = {}
     context[creneau_type] = creneau_type
     context["form"] = form
+    context["rdv_id"] = creneau_id
     return render(request, 'rdv_form.html', context)
+
+@login_required
+def form_submit(request, creneau_id):
+    context = {}
+    context["rdv_id"] = creneau_id
+
+    return render(request, 'form_submit.html', context)

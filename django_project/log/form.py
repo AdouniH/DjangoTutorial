@@ -1,5 +1,5 @@
 
-from django.forms import ModelForm
+from django.forms import ModelForm, forms
 from .models import Visitor, Token_rdv
 
 
@@ -11,6 +11,11 @@ class Log_form(ModelForm):
 from django.forms import ModelForm
 
 class TokenrdvForm(ModelForm):
+
     class Meta:
         model = Token_rdv
-        fields = '__all__'
+        fields = ('name', 'email', 'duration', 'commentaire')
+
+    def __init__(self, *args, **kwargs):
+        super(TokenrdvForm, self).__init__(*args, **kwargs)
+        self.fields['commentaire'].required = False
