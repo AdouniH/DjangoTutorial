@@ -14,7 +14,7 @@ class TokenrdvForm(ModelForm):
 
     class Meta:
         model = Token_rdv
-        fields = ('name', 'email', 'duration', 'commentaire')
+        fields = ('name', 'email', 'company', 'duration', 'commentaire')
 
     def __init__(self, *args, **kwargs):
         super(TokenrdvForm, self).__init__(*args, **kwargs)

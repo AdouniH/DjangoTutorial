@@ -97,7 +97,7 @@ def rdv_fix(request, creneau_id):
             rdv_object = form.save(commit=False)
             rdv_object.rdv_shift = RendezVous.objects.get(id=creneau_id)
             rdv_object.save()
-            return HttpResponse("SUCCESS")
+            return render(request, 'success.html', {})
         else:
             return HttpResponse("form is not valid")
     form = TokenrdvForm()
@@ -115,3 +115,7 @@ def form_submit(request, creneau_id):
     context["rdv_id"] = creneau_id
 
     return render(request, 'form_submit.html', context)
+
+@login_required
+def test(request):
+    return render(request, "success.html", {})

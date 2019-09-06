@@ -29,6 +29,7 @@ class Token_rdv(models.Model):
     ]
     name = models.CharField(max_length=200, verbose_name="Votre nom")
     email = models.EmailField(max_length=254, verbose_name="Votre email")
+    company = models.CharField(max_length=254, verbose_name="Nom de l'entreprise")
     duration = models.CharField(
         max_length=2,
         choices=CHOICES,
@@ -41,3 +42,5 @@ class Token_rdv(models.Model):
         on_delete=models.CASCADE
     )
 
+    def __str__(self):
+        return "{} - {}".format(self.name, self.rdv_shift)

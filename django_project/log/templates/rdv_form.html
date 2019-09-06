@@ -5,9 +5,10 @@
 
     <div class="container">
         <form action="{% url 'rdv_fix' rdv_id %}" method="post">
+            <div class="form-group">
     {% csrf_token %}
         {{ form.as_p }}
-
+            </div>
     <input type="submit" value="Submit">
 </form>
         <p> Hello w</p>
