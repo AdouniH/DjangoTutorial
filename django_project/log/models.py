@@ -19,7 +19,7 @@ class RendezVous(models.Model):
     time = models.DateTimeField()
 
     def __str__(self):
-        return self.time.strftime('%Y%m%d#%H:%M')
+        return self.time.strftime('%d/%m/%Y - %H:%M')
 
 class Token_rdv(models.Model):
     CHOICES = [
@@ -43,4 +43,4 @@ class Token_rdv(models.Model):
     )
 
     def __str__(self):
-        return "{} - {}".format(self.name, self.rdv_shift)
+        return "{} - {}".format(self.company, self.rdv_shift)

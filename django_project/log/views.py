@@ -5,9 +5,11 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import logout, login
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+import datetime
 from .form import Log_form, TokenrdvForm
 from .models import Visitor, RendezVous
 from .business_module.business import arrange
+from .business_module import business
 
 def main_page(request):
     if request.user.is_authenticated:
@@ -80,11 +82,15 @@ def rdv(request, section):
         x["hour"] = i.time.strftime('%H:%M')
         x["id"] = i.id
         x["comparator"] = i.time.strftime('%Y%m%d')
-        l.append(x)
+
+        day = i.time.strftime('%Y%m%d')
+        now = datetime.datetime.now()
+        actual_day = int((now.year * 10000) + (now.month * 100) + (now.day))
+        if not actual_day > int(day) + 2:
+            l.append(x)
     sorted_creneau = arrange(l)
 
     context["rdvs"] = sorted_creneau
-
 
     return render(request, 'rdv.html', context)
 
@@ -93,11 +99,12 @@ def rdv_fix(request, creneau_id):
     if request.method == "POST":
         form = TokenrdvForm(request.POST)
         if form.is_valid():
-            form.cleaned_data["name"] = "haha"
             rdv_object = form.save(commit=False)
             rdv_object.rdv_shift = RendezVous.objects.get(id=creneau_id)
             rdv_object.save()
-            return render(request, 'success.html', {})
+            mail = form.cleaned_data["email"]
+            business.send_mail(mail, "merci !", " merci pour votre réservation")
+            return render(request, 'success.html', {"mail": mail})
         else:
             return HttpResponse("form is not valid")
     form = TokenrdvForm()
