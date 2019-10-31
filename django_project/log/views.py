@@ -76,6 +76,8 @@ def rdv(request, section):
 
     l = []
     for i in phone_crenaux:
+        if i.token:
+            continue
         x = {}
         x["day"] = i.time.strftime('%d/%m/%Y')
         x["day_name"] = day_mapping[i.time.strftime('%A')]
@@ -101,10 +103,18 @@ def rdv_fix(request, creneau_id):
         if form.is_valid():
             rdv_object = form.save(commit=False)
             rdv_object.rdv_shift = RendezVous.objects.get(id=creneau_id)
+            time = RendezVous.objects.get(id=creneau_id).time
+            date = time.strftime('%d/%m/%Y')
+            day = time.strftime('%A')
+            hour = time.strftime('%H:%M')
+            verbose = """Bonjour,\nMerci de m'appeler {} le {} à {}\n\nBien cordialement,\nHoussem ADOUNI""".format(day, date, hour)
+            rdvo = RendezVous.objects.get(id=creneau_id)
+            rdvo.token = True
+            rdvo.save()
             rdv_object.save()
             mail = form.cleaned_data["email"]
-            business.send_mail(mail, "merci !", " merci pour votre réservation")
-            return render(request, 'success.html', {"mail": mail})
+            # business.send_mail(mail, "Confirmation de votre rendez vous télephonique", verbose)
+            return render(request, 'success.html', {"mail": mail, "time": verbose})
         else:
             return HttpResponse("form is not valid")
     form = TokenrdvForm()

@@ -17,6 +17,7 @@ class RendezVous(models.Model):
 
     id = models.AutoField(primary_key=True)
     time = models.DateTimeField()
+    token = models.BooleanField()
 
     def __str__(self):
         return self.time.strftime('%d/%m/%Y - %H:%M')

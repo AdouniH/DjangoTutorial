@@ -3,6 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style>
+
+        h1 {
+
+	font-size: 100px;
+	text-align: center;
+    letter-spacing: -0.10em;
+    font-family: 'Lato', sans-serif;
+ }
+
+#nav-bar{
+	float: right;
+}
+
+#nav-bar li{
+	display: inline-block;
+    color: black;
+}
+
+li a {
+	color: black;
+}
+a {
+
+	text-decoration: none;
+	color: white;
+}
+
+a:visited{
+
+	color:black;
+}
+
+#signIn{
+
+	background-color: #4285f4;
+	color: white;
+	border: none;
+	border-radius: 5px;
+	margin:6px 2px;
+	font-size: 16px;
+    height: 30px;
+
+}
+
+.btn{
+
+border:none;
+height: 35px;
+}
+
+.btnList{
+
+padding: 15px;
+text-align: center;
+
+}
+
+img{
+
+  height:30px;
+  margin-right:auto;
+  margin-left:auto;
+  margin-bottom: -10px;
+
+}
+
+.search-control{
+	text-align: center;
+    margin-bottom: 10px;
+    margin-top: -55px;
+}
+
+#searchInput{
+
+height: 28px;
+width: 400px;
+
+}
+    </style>
 </head>
 <body>
 <form action= {%url 'main_page' %} method="post">
@@ -12,5 +92,57 @@
 </form>
 
 <p> {{ msg }}</p>
+
+<html>
+<head>
+	<title>Google Homepage</title>
+
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+</head>
+<body>
+
+    <div>
+		<ul id="nav-bar">
+	<li class="nav-links" id="gmail"><a href="http://gmail.com" target="_blank">Gmail</a></li>
+    <li class="nav-links" id="images"><a href="https://www.google.com.au/imghp?hl=en" target="_blank">Images</a></li>
+    <img src="https://png.icons8.com/windows/50/000000/rubiks-cube.png">
+    <button id="signIn" type="button" class="btn-btn"><a href="https://accounts.google.com/Login?hl=EN" target="_blank">Sign In</button>
+    </a></ul>
+   </div>
+   <br>
+
+
+	<div class="text-center">
+
+    <h1>
+
+    	<span style='color: #4285f4'> H </span>
+    	<span style='color: #ea4335'> O </span>
+    	<span style='color: #fbbc05'> U </span>
+    	<span style='color: #4285f4'> S </span>
+    	<span style='color: #34a853'> S </span>
+    	<span style='color: #ea4335'> E </span>
+ </span>
+    	<span style='color: #ea4335'> M</span>
+    </h1>
+
+
+    <div class="search-control">
+    <input type="text" id="searchInput">
+    </div>
+
+
+    <div class="btnList">
+
+    <button id="search" type="button" class="btn btn primary"><a href="https://www.google.com/" target="_blank">Google Search </a></button>
+    <button id="search" type="button" class="btn btnprimary"><a href="https://www.google.com/doodles/" target="_blank">I'm Feeling Lucky</a></button>
+
+    </div>
+    </div>
+
+</body>
+</html>
+
 </body>
 </html>
